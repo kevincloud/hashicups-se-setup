@@ -5,7 +5,7 @@ In the following walk through you will create an environment to run hashicups lo
 ### Pre-Reqs
 
 * Install [Docker](https://docs.docker.com/get-docker/)
-* Install [Golang](https://golang.org/doc/install) 1.11 or newer and configure path
+* Install [Golang](https://golang.org/doc/install) 1.11 or newer and configure your $PATH to make sure it includes ```$GOPATH/bin``` . You can do this easily by adding it in your .zshrc or .bash_profile like so... ```export PATH=$PATH:$(go env GOPATH)/bin``` 
 * Install [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/) (What will be used for running small/fast k8s instance)
 * Install [Helm](https://helm.sh/docs/intro/install/)
 * (RECCOMENDED) I'm using ZSH. This should work with bash as well but you can install zsh using Oh-My-ZSH [here](https://ohmyz.sh/#install)
