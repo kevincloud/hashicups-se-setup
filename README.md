@@ -40,7 +40,7 @@ cd hashicups-se-setup
 
 5. Now you should simply be able to install using the run.sh script. You may have to make it executable. 
 ```
-chmod +x ./run.sh; ./run.sh
+chmod +x run.sh; ./run.sh
 ```
 
 The script is decomposed into seperate files so you can see the steps and jump into each file as needed to see whats happening. Basically a new kind k8s node is created, consul is deployed to k8s using the helm chart and hashicups is deployed. 
