@@ -56,3 +56,6 @@ git clone --branch "${BRANCH_NAME}" https://github.com/kevincloud/hashicups-se-s
 cd /root/hashicups-se-setup/nomad-aws-deployment/
 
 . ./scripts/01-install-consul.sh
+
+. ./scripts/02-install-nomad.sh
+
