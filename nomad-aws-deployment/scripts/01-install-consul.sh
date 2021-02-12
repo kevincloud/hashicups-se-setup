@@ -23,18 +23,18 @@ sudo bash -c "cat >/etc/consul.d/consul-server.json" <<EOF
     "bind_addr": "0.0.0.0",
     "advertise_addr": "${CLIENT_IP}",
     "domain": "consul",
-    "acl_enforce_version_8": false,
     "server": true,
     "bootstrap_expect": 1,
-    "retry_join": ["provider=aws tag_key=${CONSUL_JOIN_KEY} tag_value=${CONSUL_JOIN_VALUE}"],
-    "ui": true,
+    "ui_config": {
+        "enabled": true
+    },
     "recursors": ["169.254.169.253"],
     "encrypt": "$CONSUL_KEY",
-    "acl_datacenter": "${REGION}",
-    "acl_down_policy": "extend-cache",
-    "acl_default_policy": "allow",
-    "acl_down_policy": "allow",
-    "acl_master_token": "$CONSUL_TOKEN",
+    "acl": {
+        "enabled": true,
+        "default_policy": "allow",
+        "down_policy": "extend-cache"
+    },
     "connect": {
         "enabled": true
     }
@@ -74,6 +74,11 @@ chown -R consul:consul /var/run/consul/
 echo "Start service..."
 sudo systemctl start consul
 sudo systemctl enable consul
+
+echo "Enable ACLs..."
+sleep 5
+export CONSUL_HTTP_TOKEN=`curl --request PUT http://127.0.0.1:8500/v1/acl/bootstrap | jq -r .SecretID`
+echo -e "CONSUL_HTTP_TOKEN=\"$CONSUL_HTTP_TOKEN\"" >> /etc/environment
 
 echo "Configure Consul name resolution..."
 systemctl disable systemd-resolved

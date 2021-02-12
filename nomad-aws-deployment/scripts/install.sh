@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "Starting installation"
+echo "Starting installation..."
 
-echo "Updating package repos..."
+echo "...updating package repos..."
 sudo apt-get -y update > /dev/null 2>&1
 
 echo "...installing system packages"
@@ -26,6 +26,7 @@ pip3 install awscli
 echo "...creating directories"
 mkdir -p /root/.aws
 mkdir -p /root/jobs
+mkdir -p /root/consul
 mkdir -p /etc/consul.d/server
 mkdir -p /etc/consul.d/template
 mkdir -p /etc/nomad.d
@@ -55,7 +56,10 @@ git clone --branch "${BRANCH_NAME}" https://github.com/kevincloud/hashicups-se-s
 
 cd /root/hashicups-se-setup/nomad-aws-deployment/
 
+echo "...installing Consul"
 . ./scripts/01-install-consul.sh
 
+echo "...installing Nomad"
 . ./scripts/02-install-nomad.sh
 
+echo "All done!"

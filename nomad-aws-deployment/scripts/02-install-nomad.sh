@@ -30,6 +30,68 @@ rm -rf nomad.zip
 
 # export NOMAD_TOKEN="$(cat /etc/nomad.d/token.json | jq -r .auth.client_token | tr -d '\n')"
 
+echo "Get Consul ACL token for Nomad"
+
+# Write the server policy
+sudo bash -c "cat >/root/consul/nomad-server-policy.hcl" <<EOF
+agent_prefix "" {
+  policy = "read"
+}
+
+node_prefix "" {
+  policy = "read"
+}
+
+service_prefix "" {
+  policy = "write"
+}
+
+acl = "write"
+EOF
+
+# Create the server policy
+consul acl policy create \
+  -name "nomad-server" \
+  -description "Nomad Server Policy" \
+  -rules @nomad-server-policy.hcl
+
+# Write the client policy
+sudo bash -c "cat >/root/consul/nomad-client-policy.hcl" <<EOF
+agent_prefix "" {
+  policy = "read"
+}
+
+node_prefix "" {
+  policy = "read"
+}
+
+service_prefix "" {
+  policy = "write"
+}
+
+acl = "write"
+EOF
+
+# Create the client policy
+consul acl policy create \
+  -name "nomad-client" \
+  -description "Nomad Client Policy" \
+  -rules @/root/consul/nomad-client-policy.hcl
+
+# Create a token for Nomad to use with Consul
+sudo bash -c "cat >/root/consul/nomad-token-request.json" <<EOF
+{
+    "Description": "Nomad Token",
+    "Policies": [
+        { "Name": "nomad-server" },
+        { "Name": "nomad-client" }
+    ]
+}
+EOF
+
+export NOMAD_CONSUL_TOKEN=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-token-request.json http://127.0.0.1:8500/v1/acl/token | jq -r .SecretID`
+echo -e "NOMAD_CONSUL_TOKEN=\"$NOMAD_CONSUL_TOKEN\"" >> /etc/environment
+
 sudo bash -c "cat >/etc/nomad.d/nomad.hcl" <<EOF
 data_dir  = "/opt/nomad"
 plugin_dir = "/opt/nomad/plugins"
@@ -45,8 +107,9 @@ ports {
 
 consul {
     address             = "127.0.0.1:8500"
+    token               = "$NOMAD_CONSUL_TOKEN"
     server_service_name = "nomad-server"
-    client_service_name = "nomad-server"
+    client_service_name = "nomad-clients"
     auto_advertise      = true
     server_auto_join    = true
     client_auto_join    = true
