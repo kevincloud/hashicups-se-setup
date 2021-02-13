@@ -33,50 +33,30 @@ rm -rf nomad.zip
 echo "Get Consul ACL token for Nomad"
 
 # Write the server policy
-sudo bash -c "cat >/root/consul/nomad-server-policy.hcl" <<EOF
-agent_prefix "" {
-  policy = "read"
+sudo bash -c "cat >/root/consul/nomad-server-policy.json" <<EOF
+{
+    "Name": "nomad-server",
+    "Description": "Nomad Server Policy",
+    "Rules": "agent_prefix \"\" {\n  policy = \"read\"\n}\n\nnode_prefix \"\" {\n  policy = \"read\"\n}\n\nservice_prefix \"\" {\n  policy = \"write\"\n}\n\nacl = \"write\""
 }
-
-node_prefix "" {
-  policy = "read"
-}
-
-service_prefix "" {
-  policy = "write"
-}
-
-acl = "write"
 EOF
 
 # Create the server policy
-consul acl policy create \
-  -name "nomad-server" \
-  -description "Nomad Server Policy" \
-  -rules @/root/consul/nomad-server-policy.hcl
+echo "Create the server policy"
+curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-server-policy.json http://127.0.0.1:8500/v1/acl/policy | jq
 
 # Write the client policy
-sudo bash -c "cat >/root/consul/nomad-client-policy.hcl" <<EOF
-agent_prefix "" {
-  policy = "read"
+sudo bash -c "cat >/root/consul/nomad-client-policy.json" <<EOF
+{
+    "Name": "nomad-client",
+    "Description": "Nomad Client Policy",
+    "Rules": "agent_prefix \"\" {\n  policy = \"read\"\n}\n\nnode_prefix \"\" {\n  policy = \"read\"\n}\n\nservice_prefix \"\" {\n  policy = \"write\"\n}\n\nacl = \"write\""
 }
-
-node_prefix "" {
-  policy = "read"
-}
-
-service_prefix "" {
-  policy = "write"
-}
-
-acl = "write"
 EOF
 
 # Create the client policy
-consul acl policy create \
-  -name "nomad-client" \
-  -description "Nomad Client Policy" \
-  -rules @/root/consul/nomad-client-policy.hcl
+echo "Create the client policy"
+curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq
 
 # Create a token for Nomad to use with Consul
 sudo bash -c "cat >/root/consul/nomad-token-request.json" <<EOF
