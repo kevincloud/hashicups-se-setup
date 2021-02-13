@@ -90,11 +90,11 @@ export CONSUL_HTTP_TOKEN=`curl --request PUT http://127.0.0.1:8500/v1/acl/bootst
 echo -e "CONSUL_HTTP_TOKEN=\"$CONSUL_HTTP_TOKEN\"" >> /etc/environment
 
 echo "Enable ACLs..."
-CONSUL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq -e . >/dev/null 2>&1 | echo ${PIPESTATUS[0]}`
+CONSUL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq -e . >/dev/null 2>&1 | echo $?`
 while [ "$CONSUL_STATUS" -ne "0" ]; do
     echo "...waiting for Consul to be healthy (acls)"
     sleep 2
-    CONSUL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq -e . >/dev/null 2>&1 | echo ${PIPESTATUS[0]}`
+    CONSUL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq -e . >/dev/null 2>&1 | echo $?`
 done
 
 echo "Configure Consul name resolution..."
