@@ -76,7 +76,15 @@ sudo systemctl start consul
 sudo systemctl enable consul
 
 echo "Enable ACLs..."
-sleep 5
+CONSUL_STATUS=`curl -s http://127.0.0.1:8500/v1/status/leader | jq -r`
+while [ -z "$CONSUL_STATUS" ]; do
+    echo "...waiting for Consul to be healthy"
+    sleep 2
+    CONSUL_STATUS=`curl -s http://127.0.0.1:8500/v1/status/leader | jq -r`
+done
+echo "...Consul is online"
+
+sleep 10
 export CONSUL_HTTP_TOKEN=`curl --request PUT http://127.0.0.1:8500/v1/acl/bootstrap | jq -r .SecretID`
 echo -e "CONSUL_HTTP_TOKEN=\"$CONSUL_HTTP_TOKEN\"" >> /etc/environment
 
