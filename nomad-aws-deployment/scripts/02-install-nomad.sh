@@ -53,7 +53,7 @@ EOF
 consul acl policy create \
   -name "nomad-server" \
   -description "Nomad Server Policy" \
-  -rules @nomad-server-policy.hcl
+  -rules @/root/consul/nomad-server-policy.hcl
 
 # Write the client policy
 sudo bash -c "cat >/root/consul/nomad-client-policy.hcl" <<EOF
