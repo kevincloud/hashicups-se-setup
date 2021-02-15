@@ -89,14 +89,12 @@ sleep 10
 export CONSUL_HTTP_TOKEN=`curl --request PUT http://127.0.0.1:8500/v1/acl/bootstrap | jq -r .SecretID`
 echo -e "CONSUL_HTTP_TOKEN=\"$CONSUL_HTTP_TOKEN\"" >> /etc/environment
 
-echo "Enable ACLs..."
+echo "Make sure ACLs are active..."
 CONSUL_ACL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq . | grep "parse error"`
-echo `curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq .`
 while [ -n "$CONSUL_ACL_STATUS" ]; do
     echo "...waiting for Consul to be healthy (acls)"
     sleep 2
     CONSUL_ACL_STATUS=`curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq . | grep "parse error"`
-    echo `curl -s --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" http://127.0.0.1:8500/v1/acl/tokens | jq .`
 done
 
 echo "Configure Consul name resolution..."

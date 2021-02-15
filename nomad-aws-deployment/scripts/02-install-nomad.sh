@@ -56,7 +56,12 @@ EOF
 
 # Create the client policy
 echo "Create the client policy"
-curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq
+NOMAD_POLICIES=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq . | grep "parse error"`
+while [ -n $NOMAD_POLICIES ]; do
+    echo "...acl is still bootstrapping"
+    sleep 2
+    NOMAD_POLICIES=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq . | grep "parse error"`
+done
 
 # Create a token for Nomad to use with Consul
 sudo bash -c "cat >/root/consul/nomad-token-request.json" <<EOF
