@@ -34,6 +34,8 @@ echo "Get Consul ACL token for Nomad"
 
 source /etc/environment
 
+echo "Consul Token: $CONSUL_HTTP_TOKEN"
+
 # Write the server policy
 sudo bash -c "cat >/root/consul/nomad-server-policy.json" <<EOF
 {
