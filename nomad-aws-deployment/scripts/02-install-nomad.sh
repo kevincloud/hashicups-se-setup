@@ -59,7 +59,7 @@ sudo bash -c "cat >/root/consul/nomad-client-policy.json" <<EOF
 EOF
 
 # Create the client policy
-curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq .
+curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy
 
 echo "Create the client policy"
 NOMAD_POLICIES=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq . | grep "parse error"`
