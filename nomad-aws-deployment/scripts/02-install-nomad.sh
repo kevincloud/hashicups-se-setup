@@ -66,6 +66,7 @@ NOMAD_POLICIES=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOK
 while [ -n $NOMAD_POLICIES ]; do
     echo "...acl is still bootstrapping"
     sleep 2
+    curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy
     NOMAD_POLICIES=`curl -s --request PUT --header "X-Consul-Token: $CONSUL_HTTP_TOKEN" --data @/root/consul/nomad-client-policy.json http://127.0.0.1:8500/v1/acl/policy | jq . | grep "parse error"`
 done
 
