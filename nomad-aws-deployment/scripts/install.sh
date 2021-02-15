@@ -63,3 +63,4 @@ echo "...installing Nomad"
 . ./scripts/02-install-nomad.sh
 
 echo "All done!"
+#

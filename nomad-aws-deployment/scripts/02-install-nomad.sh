@@ -32,6 +32,8 @@ rm -rf nomad.zip
 
 echo "Get Consul ACL token for Nomad"
 
+source /etc/environment
+
 # Write the server policy
 sudo bash -c "cat >/root/consul/nomad-server-policy.json" <<EOF
 {
