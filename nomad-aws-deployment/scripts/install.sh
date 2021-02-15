@@ -6,17 +6,27 @@ echo "...updating package repos..."
 sudo apt-get -y update > /dev/null 2>&1
 
 echo "...installing system packages"
-sudo apt-get install -y \
-    unzip \
-    git \
-    jq \
-    python3 \
-    python3-pip \
-    python3-dev \
-    dnsmasq \
-    npm \
-    docker.io \
-    nginx > /dev/null 2>&1
+echo "      unzip (1 of 10)"
+sudo apt-get install -y unzip > /dev/null 2>&1
+echo "      git (2 of 10)"
+sudo apt-get install -y git > /dev/null 2>&1
+echo "      jq (3 of 10)"
+sudo apt-get install -y jq > /dev/null 2>&1
+echo "      python3 (4 of 10)"
+sudo apt-get install -y python3 > /dev/null 2>&1
+echo "      python3-pip (5 of 10)"
+sudo apt-get install -y python3-pip > /dev/null 2>&1
+echo "      python3-dev (6 of 10)"
+sudo apt-get install -y python3-dev > /dev/null 2>&1
+echo "      dnsmasq (7 of 10)"
+sudo apt-get install -y dnsmasq > /dev/null 2>&1
+echo "      npm (8 of 10)"
+sudo apt-get install -y npm > /dev/null 2>&1
+echo "      docker.io (9 of 10)"
+sudo apt-get install -y docker.io > /dev/null 2>&1
+echo "      nginx (10 of 10)"
+sudo apt-get install -y nginx > /dev/null 2>&1
+echo "   done"
 
 echo "...installing python libraries"
 pip3 install botocore
