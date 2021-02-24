@@ -15,6 +15,7 @@ resource "aws_instance" "hashi-server" {
         NOMAD_URL = var.nomad_dl_url
         NOMAD_LICENSE = var.nomad_license_key
         BRANCH_NAME = var.git_branch
+        SLACK_URL = var.slack_url
     })
 
     tags = {
@@ -98,6 +99,13 @@ resource "aws_security_group" "hashi-server-sg" {
     ingress {
         from_port = 8500
         to_port = 8500
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port = 9090
+        to_port = 9090
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }

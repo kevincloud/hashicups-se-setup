@@ -92,6 +92,11 @@ ports {
     serf = 4648
 }
 
+host_volume "pgdata" {
+    path      = "/opt/postgres/data"
+    read_only = false
+}
+
 consul {
     address             = "127.0.0.1:8500"
     token               = "$NOMAD_CONSUL_TOKEN"

@@ -51,6 +51,10 @@ variable "git_branch" {
     default = "master"
 }
 
+variable "slack_url" {
+    description = "Optional URL for posting to a Slack channel"
+}
+
 variable "owner" {
     description = ""
 }
