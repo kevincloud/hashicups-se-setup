@@ -92,11 +92,6 @@ ports {
     serf = 4648
 }
 
-host_volume "pgdata" {
-    path      = "/opt/postgres/data"
-    read_only = false
-}
-
 consul {
     address             = "127.0.0.1:8500"
     token               = "$NOMAD_CONSUL_TOKEN"
@@ -130,6 +125,10 @@ client {
         # "docker.privileged.enabled" = "true"
     }
     servers = ["nomad-server.service.${REGION}.consul:4647"]
+    host_volume "pgdata" {
+        path      = "/opt/postgres/data"
+        read_only = false
+    }
 }
 EOF
 

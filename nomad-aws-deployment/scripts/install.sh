@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "Starting installation..."
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Starting installation and configuration..."}' ${SLACK_URL}
 
 echo "...updating package repos..."
 sudo apt-get -y update > /dev/null 2>&1
@@ -55,6 +56,9 @@ export CONSUL_JOIN_KEY="${CONSUL_JOIN_KEY}"
 export CONSUL_JOIN_VALUE="${CONSUL_JOIN_VALUE}"
 export NOMAD_URL="${NOMAD_URL}"
 export NOMAD_LICENSE="${NOMAD_LICENSE}"
+export DB_USERNAME="root"
+export DB_PASSWORD="password"
+export DB_INSTANCE="products"
 export CLIENT_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
 export PUBLIC_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
 
@@ -76,8 +80,27 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: 
 echo "...installing Nomad"
 . ./scripts/02-install-nomad.sh
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete!"}' ${SLACK_URL}
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete. Creating jobs..."}' ${SLACK_URL}
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"ssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP"'}' ${SLACK_URL}
+echo "...creating Nomad jobs"
+. ./scripts/03-db-postres-job.sh
+. ./scripts/04-products-api-job.sh
+. ./scripts/05-public-api-job.sh
+. ./scripts/06-nginx-proxy-job.sh
+. ./scripts/07-frontend-job.sh
+
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
+
+echo "...submitting jobs"
+. ./scripts/08-run-jobs.sh
+
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!"}' ${SLACK_URL}
+
+curl -X POST -H 'Content-type: application/json' --data '{"text":"ssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'"}' ${SLACK_URL}
 
 echo "All done!"
+
+# printf '{ "JobHCL": "' > job.tmp
+# cat frontend.nomad | tr -d "\n" | sed 's;\\n;\\\\n;g' | sed 's;\";\\\";g' | sed ':a;N;$!ba;s;\n;\\n;g' >> job.tmp
+# printf '", "Canonicalize": true }' >> job.tmp
+# curl -X POST -H 'Content-type: application/json' --data @job.tmp http://127.0.0.1:4646/v1/jobs/parse

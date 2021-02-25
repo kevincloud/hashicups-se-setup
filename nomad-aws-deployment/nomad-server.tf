@@ -8,6 +8,7 @@ resource "aws_instance" "hashi-server" {
     user_data = templatefile("${path.module}/scripts/install.sh", {
         AWS_KMS_KEY_ID = var.aws_kms_key_id
         REGION = var.aws_region
+        KEY_PAIR_NAME = var.key_pair
         CONSUL_URL = var.consul_dl_url
         CONSUL_LICENSE = var.consul_license_key
         CONSUL_JOIN_KEY = var.consul_join_key
