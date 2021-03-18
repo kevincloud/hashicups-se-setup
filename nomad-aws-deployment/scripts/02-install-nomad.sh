@@ -169,6 +169,7 @@ curl \
 PAYLOAD
 
 echo "Bootstrapping ACL system..."
+sleep 10
 curl -s \
     --request POST \
     http://127.0.0.1:4646/v1/acl/bootstrap > /root/nomad-init.txt
