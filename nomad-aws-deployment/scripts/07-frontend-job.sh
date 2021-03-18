@@ -31,8 +31,8 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
             ]
           },
           "Env": {
-            "NODE_IP": "${NOMAD_IP_http}",
-            "PORT": "${NOMAD_PORT_http}"
+            "NODE_IP": "\${NOMAD_IP_http}",
+            "PORT": "\${NOMAD_PORT_http}"
           },
           "Services": [
             {

@@ -59,6 +59,7 @@ export NOMAD_LICENSE="${NOMAD_LICENSE}"
 export DB_USERNAME="root"
 export DB_PASSWORD="password"
 export DB_INSTANCE="products"
+export KEY_PAIR_NAME="${KEY_PAIR_NAME}"
 export CLIENT_IP=`curl http://169.254.169.254/latest/meta-data/local-ipv4`
 export PUBLIC_IP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
 

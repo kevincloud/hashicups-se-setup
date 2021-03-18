@@ -115,6 +115,10 @@ server {
     bootstrap_expect = 1
 }
 
+acl {
+    enabled = true
+}
+
 client {
     enabled       = true
     network_speed = 1000
@@ -163,5 +167,12 @@ curl \
     "Port": 4647
 }
 PAYLOAD
+
+echo "Bootstrapping ACL system..."
+# curl \
+#     --request POST \
+#     https://127.0.0.1:4646/v1/acl/bootstrap > /root/nomad-init.txt
+
+# cat /root/noman-init.txt | jq .
 
 echo "Nomad installation complete."

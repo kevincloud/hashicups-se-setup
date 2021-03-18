@@ -35,7 +35,7 @@ sudo bash -c "cat >/root/jobs/db-postgres.json" <<EOF
           "Env": {
             "POSTGRES_DB": "$DB_INSTANCE",
             "POSTGRES_USER": "$DB_USERNAME",
-            "POSTGRES_PASSWORD": "DB_PASSWORD"
+            "POSTGRES_PASSWORD": "$DB_PASSWORD"
           },
           "Services": [
             {
