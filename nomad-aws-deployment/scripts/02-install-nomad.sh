@@ -169,10 +169,11 @@ curl \
 PAYLOAD
 
 echo "Bootstrapping ACL system..."
-# curl \
-#     --request POST \
-#     https://127.0.0.1:4646/v1/acl/bootstrap > /root/nomad-init.txt
+curl -s \
+    --request POST \
+    http://127.0.0.1:4646/v1/acl/bootstrap > /root/nomad-init.txt
 
-# cat /root/noman-init.txt | jq .
+export NOMAD_TOKEN=`cat /root/nomad-init.txt | jq -r .SecretID`
+echo -e "NOMAD_TOKEN=\"$NOMAD_TOKEN\"" >> /etc/environment
 
 echo "Nomad installation complete."
