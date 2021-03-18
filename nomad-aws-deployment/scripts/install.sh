@@ -84,7 +84,7 @@ echo "...installing Nomad"
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete. Creating jobs..."}' ${SLACK_URL}
 
 echo "...creating Nomad jobs"
-. ./scripts/03-db-postres-job.sh
+. ./scripts/03-db-postgres-job.sh
 . ./scripts/04-products-api-job.sh
 . ./scripts/05-public-api-job.sh
 . ./scripts/06-nginx-proxy-job.sh
