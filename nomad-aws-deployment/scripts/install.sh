@@ -101,9 +101,6 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"Consul token: 
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad token: '$NOMAD_TOKEN'"}' ${SLACK_URL}
 
-echo "All done!"
+curl -X POST -H 'Content-type: application/json' --data '{"text":"ssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'"}' ${SLACK_URL}
 
-# printf '{ "JobHCL": "' > job.tmp
-# cat frontend.nomad | tr -d "\n" | sed 's;\\n;\\\\n;g' | sed 's;\";\\\";g' | sed ':a;N;$!ba;s;\n;\\n;g' >> job.tmp
-# printf '", "Canonicalize": true }' >> job.tmp
-# curl -X POST -H 'Content-type: application/json' --data @job.tmp http://127.0.0.1:4646/v1/jobs/parse
+echo "All done!"
