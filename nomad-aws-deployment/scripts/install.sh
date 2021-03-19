@@ -7,26 +7,24 @@ echo "...updating package repos..."
 sudo apt-get -y update > /dev/null 2>&1
 
 echo "...installing system packages"
-echo "      unzip (1 of 10)"
+echo "      unzip (1 of 9)"
 sudo apt-get install -y unzip > /dev/null 2>&1
-echo "      git (2 of 10)"
+echo "      git (2 of 9)"
 sudo apt-get install -y git > /dev/null 2>&1
-echo "      jq (3 of 10)"
+echo "      jq (3 of 9)"
 sudo apt-get install -y jq > /dev/null 2>&1
-echo "      python3 (4 of 10)"
+echo "      python3 (4 of 9)"
 sudo apt-get install -y python3 > /dev/null 2>&1
-echo "      python3-pip (5 of 10)"
+echo "      python3-pip (5 of 9)"
 sudo apt-get install -y python3-pip > /dev/null 2>&1
-echo "      python3-dev (6 of 10)"
+echo "      python3-dev (6 of 9)"
 sudo apt-get install -y python3-dev > /dev/null 2>&1
-echo "      dnsmasq (7 of 10)"
+echo "      dnsmasq (7 of 9)"
 sudo apt-get install -y dnsmasq > /dev/null 2>&1
-echo "      npm (8 of 10)"
+echo "      npm (8 of 9)"
 sudo apt-get install -y npm > /dev/null 2>&1
-echo "      docker.io (9 of 10)"
+echo "      docker.io (9 of 9)"
 sudo apt-get install -y docker.io > /dev/null 2>&1
-echo "      nginx (10 of 10)"
-sudo apt-get install -y nginx > /dev/null 2>&1
 echo "   done"
 
 echo "...installing python libraries"
@@ -87,13 +85,12 @@ echo "...creating Nomad jobs"
 . ./scripts/03-db-postgres-job.sh
 . ./scripts/04-products-api-job.sh
 . ./scripts/05-public-api-job.sh
-. ./scripts/06-nginx-proxy-job.sh
-. ./scripts/07-frontend-job.sh
+. ./scripts/06-frontend-job.sh
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
 
 echo "...submitting jobs"
-. ./scripts/08-run-jobs.sh
+. ./scripts/07-run-jobs.sh
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!"}' ${SLACK_URL}
 

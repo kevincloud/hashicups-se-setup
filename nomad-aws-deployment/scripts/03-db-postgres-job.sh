@@ -28,7 +28,7 @@ sudo bash -c "cat >/root/jobs/db-postgres.json" <<EOF
             "Driver": "docker",
             "User": "",
             "Config": {
-              "image": "hashicorpdemoapp/product-api-db:v0.0.11",
+              "image": "hashicorpdemoapp/product-api-db:v0.0.14",
               "network_mode": "host",
               "port_map": [{ "db": 5432 }]
             },

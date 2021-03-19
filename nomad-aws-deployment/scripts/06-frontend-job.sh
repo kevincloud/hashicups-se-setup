@@ -23,8 +23,7 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
             "Name": "server",
             "Driver": "docker",
             "Config": {
-              "image": "hashicorpdemoapp/frontend:v0.0.3",
-              "dns_servers": ["127.0.0.1:8600"],
+              "image": "hashicorpdemoapp/frontend:v0.0.4",
               "volumes": [
                 "local:/etc/nginx/conf.d"
               ]

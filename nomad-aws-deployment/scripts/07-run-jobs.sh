@@ -9,8 +9,5 @@ curl -X POST --header "X-Nomad-Token: $NOMAD_TOKEN" --data @/root/jobs/products-
 echo "Submitting public-api job..."
 curl -X POST --header "X-Nomad-Token: $NOMAD_TOKEN" --data @/root/jobs/public-api.json http://localhost:4646/v1/jobs
 
-echo "Submitting nginx-proxy job..."
-curl -X POST --header "X-Nomad-Token: $NOMAD_TOKEN" --data @/root/jobs/nginx-proxy.json http://localhost:4646/v1/jobs
-
 echo "Submitting frontend job..."
 curl -X POST --header "X-Nomad-Token: $NOMAD_TOKEN" --data @/root/jobs/frontend.json http://localhost:4646/v1/jobs

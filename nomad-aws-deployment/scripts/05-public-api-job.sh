@@ -28,13 +28,13 @@ sudo bash -c "cat >/root/jobs/public-api.json" <<EOF
             "Driver": "docker",
             "User": "",
             "Config": {
-              "dns_servers": ["127.0.0.1:8600"],
               "port_map": [{ "pub_api": 8080 }],
-              "image": "hashicorpdemoapp/public-api:v0.0.1"
+              "image": "hashicorpdemoapp/public-api:v0.0.4"
             },
             "Env": {
               "BIND_ADDRESS": ":8080",
-              "PRODUCTS_API_URI": "http://products-api-server.service.consul:9090"
+              "PRODUCT_API_URI": "http://products-api-server.service.consul:9090",
+              "PAYMENT_API_URI": "http://public-api-server.service.consul:8080"
             },
             "Services": [
               {
