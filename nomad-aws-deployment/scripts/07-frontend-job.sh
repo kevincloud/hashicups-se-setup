@@ -24,6 +24,7 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
             "Driver": "docker",
             "Config": {
               "image": "hashicorpdemoapp/frontend:v0.0.3",
+              "dns_servers": ["127.0.0.1:8600"],
               "volumes": [
                 "local:/etc/nginx/conf.d"
               ]
@@ -59,6 +60,9 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
               "Networks": [
                 {
                   "MBits": 10,
+                  "DNS": {
+                    "Servers": ["169.254.1.1"]
+                  },
                   "ReservedPorts": [
                     {
                       "Label": "http",
@@ -67,6 +71,13 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
                   ]
                 }
               ]
+            }
+          }
+        ],
+        "Networks": [
+          {
+            "DNS": {
+              "Servers": ["169.254.1.1"]
             }
           }
         ]

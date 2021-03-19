@@ -177,4 +177,8 @@ curl -s \
 export NOMAD_TOKEN=`cat /root/nomad-init.txt | jq -r .SecretID`
 echo -e "NOMAD_TOKEN=\"$NOMAD_TOKEN\"" >> /etc/environment
 
+
+systemctl disable nginx
+systemctl stop nginx
+
 echo "Nomad installation complete."

@@ -55,6 +55,9 @@ sudo bash -c "cat >/root/jobs/db-postgres.json" <<EOF
               "CPU": 100,
               "MemoryMB": 300,
               "Networks": [{
+                  "DNS": {
+                    "Servers": ["169.254.1.1"]
+                  },
                   "ReservedPorts": [{
                       "Label": "db",
                       "Value": 5432
@@ -79,6 +82,13 @@ sudo bash -c "cat >/root/jobs/db-postgres.json" <<EOF
           "SizeMB": 300,
           "Migrate": false
         },
+        "Networks": [
+          {
+            "DNS": {
+              "Servers": ["169.254.1.1"]
+            }
+          }
+        ],
         "Volumes": {
           "pgdata": {
             "Name": "pgdata",

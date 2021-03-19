@@ -28,6 +28,7 @@ sudo bash -c "cat >/root/jobs/public-api.json" <<EOF
             "Driver": "docker",
             "User": "",
             "Config": {
+              "dns_servers": ["127.0.0.1:8600"],
               "port_map": [{ "pub_api": 8080 }],
               "image": "hashicorpdemoapp/public-api:v0.0.1"
             },
@@ -51,11 +52,21 @@ sudo bash -c "cat >/root/jobs/public-api.json" <<EOF
             ],
             "Resources": {
               "Networks": [{
+                  "DNS": {
+                    "Servers": ["169.254.1.1"]
+                  },
                   "ReservedPorts": [{
-                      "Label": "pub_api",
-                      "Value": 8080
-                    }]
-                }]
+                    "Label": "pub_api",
+                    "Value": 8080
+                  }]
+              }]
+            }
+          }
+        ],
+        "Networks": [
+          {
+            "DNS": {
+              "Servers": ["169.254.1.1"]
             }
           }
         ]

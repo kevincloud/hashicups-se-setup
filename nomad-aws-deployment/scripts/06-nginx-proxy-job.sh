@@ -61,6 +61,9 @@ sudo bash -c "cat >/root/jobs/nginx-proxy.json" <<EOF
               "Networks": [
                 {
                   "MBits": 10,
+                  "DNS": {
+                    "Servers": ["169.254.1.1"]
+                  },
                   "ReservedPorts": [
                     {
                       "Label": "http",
@@ -69,6 +72,13 @@ sudo bash -c "cat >/root/jobs/nginx-proxy.json" <<EOF
                   ]
                 }
               ]
+            }
+          }
+        ],
+        "Networks": [
+          {
+            "DNS": {
+              "Servers": ["169.254.1.1"]
             }
           }
         ]

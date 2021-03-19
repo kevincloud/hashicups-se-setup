@@ -27,6 +27,7 @@ sudo bash -c "cat >/root/jobs/products-api.json" <<EOF
             "Name": "products-api",
             "Driver": "docker",
             "Config": {
+              "dns_servers": ["127.0.0.1:8600"],
               "port_map": [{ "http_port": 9090 }],
               "image": "hashicorpdemoapp/product-api:v0.0.11"
             },
@@ -57,12 +58,22 @@ sudo bash -c "cat >/root/jobs/products-api.json" <<EOF
             "Resources": {
               "Networks": [
                 {
+                  "DNS": {
+                    "Servers": ["169.254.1.1"]
+                  },
                   "ReservedPorts": [{
-                      "Label": "http_port",
-                      "Value": 9090
-                    }]
+                    "Label": "http_port",
+                    "Value": 9090
+                  }]
                 }
               ]
+            }
+          }
+        ],
+        "Networks": [
+          {
+            "DNS": {
+              "Servers": ["169.254.1.1"]
             }
           }
         ]

@@ -97,7 +97,7 @@ echo "...submitting jobs"
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!"}' ${SLACK_URL}
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Consul token: '$NOMAD_CONSUL_TOKEN'"}' ${SLACK_URL}
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Consul token: '$CONSUL_HTTP_TOKEN'"}' ${SLACK_URL}
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad token: '$NOMAD_TOKEN'"}' ${SLACK_URL}
 
