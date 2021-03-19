@@ -28,7 +28,6 @@ sudo bash -c "cat >/root/jobs/public-api.json" <<EOF
             "Driver": "docker",
             "User": "",
             "Config": {
-              "dns_servers": ["172.17.0.1"],
               "port_map": [{ "pub_api": 8080 }],
               "image": "hashicorpdemoapp/public-api:v0.0.1"
             },

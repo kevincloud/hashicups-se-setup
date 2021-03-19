@@ -27,7 +27,6 @@ sudo bash -c "cat >/root/jobs/products-api.json" <<EOF
             "Name": "products-api",
             "Driver": "docker",
             "Config": {
-              "dns_servers": ["172.17.0.1"],
               "port_map": [{ "http_port": 9090 }],
               "image": "hashicorpdemoapp/product-api:v0.0.11"
             },
