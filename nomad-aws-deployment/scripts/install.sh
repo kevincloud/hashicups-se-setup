@@ -1,7 +1,9 @@
 #!/bin/bash
 
 echo "Starting installation..."
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Starting installation and configuration..."}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Starting installation and configuration..."}' ${SLACK_URL}
+fi
 
 echo "...updating package repos..."
 sudo apt-get -y update > /dev/null 2>&1
@@ -67,19 +69,25 @@ echo "...cloning repo"
 cd /root
 git clone --branch "${BRANCH_NAME}" https://github.com/kevincloud/hashicups-se-setup.git
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Base install is complete. Continuing to Consul..."}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Base install is complete. Continuing to Consul..."}' ${SLACK_URL}
+fi
 
 cd /root/hashicups-se-setup/nomad-aws-deployment/
 
 echo "...installing Consul"
 . ./scripts/01-install-consul.sh
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Consul install is complete. Continuing to Nomad..."}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Consul install is complete. Continuing to Nomad..."}' ${SLACK_URL}
+fi
 
 echo "...installing Nomad"
 . ./scripts/02-install-nomad.sh
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete. Creating jobs..."}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete. Creating jobs..."}' ${SLACK_URL}
+fi
 
 echo "...creating Nomad jobs"
 . ./scripts/03-db-postgres-job.sh
@@ -88,17 +96,15 @@ echo "...creating Nomad jobs"
 . ./scripts/06-public-api-job.sh
 . ./scripts/07-frontend-job.sh
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
+fi
 
 echo "...submitting jobs"
 . ./scripts/08-run-jobs.sh
 
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!"}' ${SLACK_URL}
-
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Consul token: '$CONSUL_HTTP_TOKEN'"}' ${SLACK_URL}
-
-curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad token: '$NOMAD_TOKEN'"}' ${SLACK_URL}
-
-curl -X POST -H 'Content-type: application/json' --data '{"text":"ssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'"}' ${SLACK_URL}
+if [ ! -z "$SLACK_URL" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!\nConsul UI:http://'$PUBLIC_IP':8500\nConsul token: '$CONSUL_HTTP_TOKEN'\nNomad UI:http://'$PUBLIC_IP':4646\nNomad token: '$NOMAD_TOKEN'\nssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'"}' ${SLACK_URL}
+fi
 
 echo "All done!"

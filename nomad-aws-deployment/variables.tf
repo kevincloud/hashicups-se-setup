@@ -52,7 +52,7 @@ variable "git_branch" {
 }
 
 variable "slack_url" {
-    description = "Optional URL for posting to a Slack channel"
+    description = "Optional URL for posting bootstrap info to a Slack channel"
 }
 
 variable "owner" {
