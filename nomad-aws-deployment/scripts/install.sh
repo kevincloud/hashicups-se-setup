@@ -84,13 +84,14 @@ curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: 
 echo "...creating Nomad jobs"
 . ./scripts/03-db-postgres-job.sh
 . ./scripts/04-products-api-job.sh
-. ./scripts/05-public-api-job.sh
-. ./scripts/06-frontend-job.sh
+. ./scripts/05-payments-api-job.sh
+. ./scripts/06-public-api-job.sh
+. ./scripts/07-frontend-job.sh
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
 
 echo "...submitting jobs"
-. ./scripts/07-run-jobs.sh
+. ./scripts/08-run-jobs.sh
 
 curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!"}' ${SLACK_URL}
 

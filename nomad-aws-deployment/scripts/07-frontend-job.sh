@@ -50,7 +50,7 @@ sudo bash -c "cat >/root/jobs/frontend.json" <<EOF
             "Templates": [
               {
                 "DestPath": "local/default.conf",
-                "EmbeddedTmpl": "server {\n      listen 80;\n      server_name  localhost;\n      location / {\n          root   /usr/share/nginx/html;\n          index  index.html index.htm;\n      }\n      location /api {\n          proxy_pass http://public-api-server.service.consul:8080;\n      }\n      error_page   500 502 503 504  /50x.html;\n      location = /50x.html {\n          root   /usr/share/nginx/html;\n      }\n}",
+                "EmbeddedTmpl": "server {\n      listen 80;\n      server_name  localhost;\n      location / {\n          root   /usr/share/nginx/html;\n          index  index.html index.htm;\n      }\n      location /api {\n          proxy_pass http://public-api-server.service.consul:8080;\n          proxy_http_version 1.1;\n          proxy_set_header Upgrade $http_upgrade;\n          proxy_set_header Connection "Upgrade";\n          proxy_set_header Host $host;\n      }\n      error_page   500 502 503 504  /50x.html;\n      location = /50x.html {\n          root   /usr/share/nginx/html;\n      }\n}",
                 "ChangeMode": "signal",
                 "ChangeSignal": "SIGHUP"
               }
