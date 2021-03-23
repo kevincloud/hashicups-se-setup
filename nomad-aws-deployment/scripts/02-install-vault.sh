@@ -37,8 +37,8 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-User=vault
-Group=vault
+User=root
+Group=root
 PIDFile=/var/run/vault/vault.pid
 ExecStart=/usr/local/bin/vault server -config=/etc/vault.d/vault.hcl
 ExecReload=/bin/kill -HUP \$MAINPID

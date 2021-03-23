@@ -149,8 +149,8 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-User=nomad
-Group=nomad
+User=root
+Group=root
 PIDFile=/var/run/nomad/nomad.pid
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad.d/nomad.hcl
 ExecReload=/bin/kill -HUP \$MAINPID
