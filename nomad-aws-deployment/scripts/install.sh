@@ -39,13 +39,17 @@ mkdir -p /root/jobs
 mkdir -p /root/consul
 mkdir -p /etc/consul.d/server
 mkdir -p /etc/consul.d/template
+mkdir -p /etc/vault.d
 mkdir -p /etc/nomad.d
 mkdir -p /etc/docker
 mkdir -p /opt/consul
 mkdir -p /opt/nomad
 mkdir -p /opt/nomad/plugins
 mkdir -p /opt/postgres/data
+mkdir -p /var/log/vault
 mkdir -p /var/run/consul
+mkdir -p /var/run/vault
+mkdir -p /var/run/nomad
 
 echo "...setting environment variables"
 export AWS_KMS_KEY_ID="${AWS_KMS_KEY_ID}"
@@ -54,6 +58,8 @@ export CONSUL_URL="${CONSUL_URL}"
 export CONSUL_LICENSE="${CONSUL_LICENSE}"
 export CONSUL_JOIN_KEY="${CONSUL_JOIN_KEY}"
 export CONSUL_JOIN_VALUE="${CONSUL_JOIN_VALUE}"
+export VAULT_URL="${VAULT_URL}"
+export VAULT_LICENSE="${VAULT_LICENSE}"
 export NOMAD_URL="${NOMAD_URL}"
 export NOMAD_LICENSE="${NOMAD_LICENSE}"
 export DB_USERNAME="root"
@@ -79,32 +85,39 @@ echo "...installing Consul"
 . ./scripts/01-install-consul.sh
 
 if [ ! -z "${SLACK_URL}" ]; then
-    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Consul install is complete. Continuing to Nomad..."}' ${SLACK_URL}
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Consul install is complete. Continuing to Vault..."}' ${SLACK_URL}
+fi
+
+echo "...installing Vault"
+. ./scripts/02-install-vault.sh
+
+if [ ! -z "${SLACK_URL}" ]; then
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Vault install is complete. Continuing to Nomad..."}' ${SLACK_URL}
 fi
 
 echo "...installing Nomad"
-. ./scripts/02-install-nomad.sh
+. ./scripts/03-install-nomad.sh
 
 if [ ! -z "${SLACK_URL}" ]; then
     curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Nomad install is complete. Creating jobs..."}' ${SLACK_URL}
 fi
 
 echo "...creating Nomad jobs"
-. ./scripts/03-db-postgres-job.sh
-. ./scripts/04-products-api-job.sh
-. ./scripts/05-payments-api-job.sh
-. ./scripts/06-public-api-job.sh
-. ./scripts/07-frontend-job.sh
+. ./scripts/04-db-postgres-job.sh
+. ./scripts/05-products-api-job.sh
+. ./scripts/06-payments-api-job.sh
+. ./scripts/07-public-api-job.sh
+. ./scripts/08-frontend-job.sh
 
 if [ ! -z "${SLACK_URL}" ]; then
     curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Job files have been created. Submitting jobs..."}' ${SLACK_URL}
 fi
 
 echo "...submitting jobs"
-. ./scripts/08-run-jobs.sh
+. ./scripts/09-run-jobs.sh
 
 if [ ! -z "${SLACK_URL}" ]; then
-    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!\nConsul UI:http://'$PUBLIC_IP':8500\nConsul token: '$CONSUL_HTTP_TOKEN'\nNomad UI:http://'$PUBLIC_IP':4646\nNomad token: '$NOMAD_TOKEN'\nssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'"}' ${SLACK_URL}
+    curl -X POST -H 'Content-type: application/json' --data '{"text":"Nomad Server: Installation and configuration is complete!\nConsul UI:http://'$PUBLIC_IP':8500\nConsul token: '$CONSUL_HTTP_TOKEN'\nVault UI: http://'$PUBLIC_IP':8200\nVault token: '$VAULT_TOKEN'\nNomad UI:http://'$PUBLIC_IP':4646\nNomad token: '$NOMAD_TOKEN'\nSSH Login: ssh -i ~/keys/'$KEY_PAIR_NAME'.pem ubuntu@'$PUBLIC_IP'\nHashiCups UI: http://'$PUBLIC_IP'"}' ${SLACK_URL}
 fi
 
 echo "All done!"

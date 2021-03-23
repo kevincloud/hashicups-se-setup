@@ -34,7 +34,7 @@ sudo bash -c "cat >/root/jobs/public-api.json" <<EOF
             "Env": {
               "BIND_ADDRESS": ":8080",
               "PRODUCT_API_URI": "http://products-api-server.service.consul:9090",
-              "PAYMENT_API_URI": "http://public-api-server.service.consul:8080"
+              "PAYMENT_API_URI": "http://payments-api.service.consul:18000"
             },
             "Services": [
               {

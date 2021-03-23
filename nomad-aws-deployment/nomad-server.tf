@@ -13,6 +13,8 @@ resource "aws_instance" "hashi-server" {
         CONSUL_LICENSE = var.consul_license_key
         CONSUL_JOIN_KEY = var.consul_join_key
         CONSUL_JOIN_VALUE = var.consul_join_value
+        VAULT_URL = var.vault_dl_url
+        VAULT_LICENSE = var.vault_license_key
         NOMAD_URL = var.nomad_dl_url
         NOMAD_LICENSE = var.nomad_license_key
         BRANCH_NAME = var.git_branch

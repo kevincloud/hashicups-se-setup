@@ -53,9 +53,9 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
               "Servers": ["169.254.1.1"]
             },
             "ReservedPorts": [{
-            "Label": "payments",
-            "Value": 1800,
-            "To": 8080
+              "Label": "payments",
+              "Value": 18000,
+              "To": 8080
             }]
           }
         ]

@@ -21,6 +21,11 @@ variable "consul_dl_url" {
     default = "https://releases.hashicorp.com/consul/1.6.1/consul_1.6.1_linux_amd64.zip"
 }
 
+variable "vault_dl_url" {
+    description = "URL for downloading Vault"
+    default = "https://releases.hashicorp.com/vault/1.6.3/vault_1.6.3_linux_amd64.zip"
+}
+
 variable "nomad_dl_url" {
     description = "URL for downloading Nomad"
     default = "https://releases.hashicorp.com/nomad/0.10.1/nomad_0.10.1_linux_amd64.zip"
@@ -28,6 +33,10 @@ variable "nomad_dl_url" {
 
 variable "consul_license_key" {
     description = "License key for Consul Enterprise"
+}
+
+variable "vault_license_key" {
+    description = "License key for Vault Enterprise"
 }
 
 variable "nomad_license_key" {

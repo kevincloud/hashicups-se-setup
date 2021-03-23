@@ -5,6 +5,10 @@ curl -sfLo "nomad.zip" "${NOMAD_URL}"
 sudo unzip nomad.zip -d /usr/local/bin/
 rm -rf nomad.zip
 
+echo "Add Nomad user..."
+groupadd nomad
+useradd nomad -g nomad
+
 # sudo bash -c "cat >/etc/docker/config.json" <<EOF
 # {
 # 	"credsStore": "ecr-login"
@@ -141,19 +145,31 @@ echo "Installing systemd service for Nomad..."
 sudo bash -c "cat >/etc/systemd/system/nomad.service" <<EOF
 [Unit]
 Description=Hashicorp Nomad
-After=network.target
+Requires=network-online.target
+After=network-online.target
 
 [Service]
-Type=simple
-User=root
-WorkingDirectory=/root
+User=nomad
+Group=nomad
+PIDFile=/var/run/nomad/nomad.pid
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad.d/nomad.hcl
-Restart=on-failure # or always, on-abort, etc
+ExecReload=/bin/kill -HUP \$MAINPID
+KillMode=process
+KillSignal=SIGTERM
+Restart=on-failure
+RestartSec=42s
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
+echo "Update Nomad permissions..."
+chown -R nomad:nomad /usr/local/bin/nomad
+chown -R nomad:nomad /etc/nomad.d/
+chown -R nomad:nomad /opt/nomad/
+chown -R nomad:nomad /var/run/nomad/
+
+echo "Start service..."
 sudo systemctl start nomad
 sudo systemctl enable nomad
 
