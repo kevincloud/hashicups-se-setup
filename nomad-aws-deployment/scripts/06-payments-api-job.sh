@@ -28,10 +28,7 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
             "Driver": "docker",
             "Config": {
               "ports": [ "payments" ],
-              "image": "hashicorpdemoapp/payments:v0.0.10",
-              "args": [
-                "--spring.config.location=file:secrets/bootstrap.yaml"
-              ]
+              "image": "hashicorpdemoapp/payments:v0.0.10"
             },
             "Services": [
               {
@@ -73,3 +70,7 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
   }
 }
 EOF
+
+              # "args": [
+              #   "--spring.config.location=file:./secrets/bootstrap.yaml"
+              # ]
