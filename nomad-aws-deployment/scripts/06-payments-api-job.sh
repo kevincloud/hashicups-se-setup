@@ -28,12 +28,21 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
             "Driver": "docker",
             "Config": {
               "ports": [ "payments" ],
-              "image": "hashicorpdemoapp/payments:v0.0.10"
+              "image": "hashicorpdemoapp/payments:v0.0.10",
+              "args": [
+                "--spring.config.location=file:secrets/bootstrap.yaml"
+              ]
             },
             "Services": [
               {
                 "Name": "payments-api",
                 "PortLabel": "payments"
+              }
+            ],
+            "Templates": [
+              {
+                "DestPath": "/secrets/bootstrap.yaml",
+                "EmbeddedTmpl": "spring:\n  cloud:\n    vault:\n      enabled: true\n      fail-fast: true\n      authentication: TOKEN\n      token: $VAULT_TOKEN\n      host: localhost\n      port: 8200\n      scheme: http\n"
               }
             ],
             "Resources": {

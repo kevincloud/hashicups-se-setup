@@ -147,6 +147,12 @@ curl \
     --data '{"type":"transit"}' \
     http://127.0.0.1:8200/v1/sys/mounts/transit
 
+echo "Create account key..."
+curl \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    http://127.0.0.1:8200/v1/transit/keys/payments
+
 echo "Register with Consul"
 curl \
     http://127.0.0.1:8500/v1/agent/service/register \
