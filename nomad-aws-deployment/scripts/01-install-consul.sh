@@ -50,8 +50,8 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-User=consul
-Group=consul
+User=root
+Group=root
 PIDFile=/var/run/consul/consul.pid
 PermissionsStartOnly=true
 ExecStart=/usr/local/bin/consul agent -config-file=/etc/consul.d/consul-server.json -pid-file=/var/run/consul/consul.pid
@@ -135,7 +135,9 @@ Address=169.254.1.1/32
 EOF
 
 systemctl restart systemd-networkd
+sleep 5
 systemctl stop dnsmasq
+sleep 2
 systemctl start dnsmasq
 service consul stop
 service consul start
