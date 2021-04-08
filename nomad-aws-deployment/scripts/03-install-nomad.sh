@@ -9,30 +9,24 @@ echo "Add Nomad user..."
 groupadd nomad
 useradd nomad -g nomad
 
-# sudo bash -c "cat >/etc/docker/config.json" <<EOF
-# {
-# 	"credsStore": "ecr-login"
-# }
-# EOF
+sudo bash -c "cat >/etc/nomad.d/vault-token.json" <<EOF
+{
+    "policies": [
+        "nomad-server"
+    ],
+    "ttl": "72h",
+    "renewable": true,
+    "no_parent": true
+}
+EOF
 
-# sudo bash -c "cat >/etc/nomad.d/vault-token.json" <<EOF
-# {
-#     "policies": [
-#         "nomad-server"
-#     ],
-#     "ttl": "72h",
-#     "renewable": true,
-#     "no_parent": true
-# }
-# EOF
+curl \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    --request POST \
+    --data @/etc/nomad.d/vault-token.json \
+    http://localhost:8200/v1/auth/token/create | jq . > /etc/nomad.d/token.json
 
-# curl \
-#     --header "X-Vault-Token: $VAULT_TOKEN" \
-#     --request POST \
-#     --data @/etc/nomad.d/vault-token.json \
-#     http://localhost:8200/v1/auth/token/create | jq . > /etc/nomad.d/token.json
-
-# export NOMAD_TOKEN="$(cat /etc/nomad.d/token.json | jq -r .auth.client_token | tr -d '\n')"
+export NOMAD_VAULT_TOKEN="$(cat /etc/nomad.d/token.json | jq -r .auth.client_token | tr -d '\n')"
 
 echo "Get Consul ACL token for Nomad"
 
@@ -106,13 +100,13 @@ consul {
     client_auto_join    = true
 }
 
-# vault {
-#     enabled          = true
-#     address          = "http://vault-main.service.${REGION}.consul:8200"
-#     task_token_ttl   = "1h"
-#     create_from_role = "nomad-cluster"
-#     token            = "$NOMAD_TOKEN"
-# }
+vault {
+    enabled          = true
+    address          = "http://vault.service.consul:8200"
+    task_token_ttl   = "1h"
+    create_from_role = "nomad-cluster"
+    token            = "$NOMAD_VAULT_TOKEN"
+}
 
 server {
     enabled          = true
@@ -199,6 +193,7 @@ systemctl stop nginx
 
 if [ ! -z "$NOMAD_LICENSE" ]; then
     curl \
+        --header "X-Nomad-Token: $NOMAD_TOKEN" \
         --request PUT \
         --data "$NOMAD_LICENSE" \
         http://127.0.0.1:4646/v1/operator/license
