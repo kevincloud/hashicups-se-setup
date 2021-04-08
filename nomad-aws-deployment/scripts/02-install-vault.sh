@@ -108,6 +108,14 @@ EOF
 
 echo "Configuring Vault..."
 
+if [ ! -z "$VAULT_LICENSE" ]; then
+    curl \
+        --header "X-Vault-Token: $VAULT_TOKEN" \
+        --request PUT \
+        --data "{ \"text\": \"$VAULT_LICENSE\" }" \
+        http://127.0.0.1:8200/v1/sys/license
+fi
+
 # Enable auditing
 curl \
     --header "X-Vault-Token: $VAULT_TOKEN" \

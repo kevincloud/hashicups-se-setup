@@ -155,4 +155,11 @@ service consul start
 #     --data "{ \"Datacenter\": \"$REGION\", \"Node\": \"$CONSUL_NODE_ID\", \"Address\":\"$MYSQL_HOST\", \"Service\": { \"ID\": \"customer-db\", \"Service\": \"customer-db\", \"Address\": \"$MYSQL_HOST\", \"Port\": 3306 } }" \
 #     http://127.0.0.1:8500/v1/catalog/register
 
+if [ ! -z "$CONSUL_LICENSE" ]; then
+    curl \
+        --request PUT \
+        --data "$CONSUL_LICENSE" \
+        http://127.0.0.1:8500/v1/operator/license
+fi
+
 echo "Consul installation complete!"

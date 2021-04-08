@@ -197,4 +197,11 @@ echo -e "NOMAD_TOKEN=\"$NOMAD_TOKEN\"" >> /etc/environment
 systemctl disable nginx
 systemctl stop nginx
 
+if [ ! -z "$NOMAD_LICENSE" ]; then
+    curl \
+        --request PUT \
+        --data "$NOMAD_LICENSE" \
+        http://127.0.0.1:4646/v1/operator/license
+fi
+
 echo "Nomad installation complete."

@@ -28,8 +28,9 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
             "Driver": "docker",
             "Config": {
               "ports": [ "payments" ],
-              "image": "jubican/payments:v0.0.10"
+              "image": "jubican/payments:v0.0.10",
               "args": [
+                "--spring.config.location=file:/local/application.properties",
                 "--spring.config.location=file:/secrets/bootstrap.yaml"
               ]
             },
@@ -43,6 +44,10 @@ sudo bash -c "cat >/root/jobs/payments-api.json" <<EOF
               {
                 "DestPath": "/secrets/bootstrap.yaml",
                 "EmbeddedTmpl": "spring:\n  cloud:\n    vault:\n      enabled: true\n      fail-fast: true\n      authentication: TOKEN\n      token: $VAULT_TOKEN\n      host: vault.service.consul\n      port: 8200\n      scheme: http\n"
+              },
+              {
+                "DestPath": "/local/application.properties",
+                "EmbeddedTmpl": "app.storage=redis\napp.encryption.enabled=true\napp.encryption.path=transit\napp.encryption.key=payments\nspring.redis.host=localhost\nspring.redis.port=6379"
               }
             ],
             "Resources": {
